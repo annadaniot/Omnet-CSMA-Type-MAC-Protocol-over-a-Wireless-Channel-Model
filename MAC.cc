@@ -103,43 +103,42 @@ void MAC::finish()
  
 void MAC::handleApplicationMessage(AppMessage *msg) 
 {     
-/**If buffer is empty, then      
-* extract the oldest AppMessage from macBuffer and encapsulate it into a message mmsg of type MacMessage      
-* Initialize a local variable called backoffCOunter to zero      
-* While backoffCounter is smaller than maxBackOffs,perform the ff:      
-* 1. Perform crrier sense      
-* 2. If carrier send was idle, transmit mmsg, set backoffCOunter to zero and go back to first step.      
-* 3. If carrier is busy, increment backoffcounter and wait for random time to transmit      
-* 4. Go back to step 1.      
-* */     
+  /**If buffer is empty, then      
+    * extract the oldest AppMessage from macBuffer and encapsulate it into a message mmsg of type MacMessage      
+    * Initialize a local variable called backoffCOunter to zero      
+    * While backoffCounter is smaller than maxBackOffs,perform the ff:      
+    * 1. Perform crrier sense      
+    * 2. If carrier send was idle, transmit mmsg, set backoffCOunter to zero and go back to first step.      
+    * 3. If carrier is busy, increment backoffcounter and wait for random time to transmit      
+    * 4. Go back to step 1.      
+    **/     
 
-EV<<"MAC::handleApplicationMessage"<<endl;     
-numRecvFromGen++;     
+  EV<<"MAC::handleApplicationMessage"<<endl;     
+  numRecvFromGen++;     
 
-if(macBuffer.size() < static_cast<size_t>(bufferSize)) //buffer messages in queue bounded size     
-{         
-    EV<<"macBuffer.size() < (bufferSize) \n";         
-    macBuffer.push(msg);  //insert 
+  if(macBuffer.size() < static_cast<size_t>(bufferSize)) //buffer messages in queue bounded size     
+  {         
+      EV<<"macBuffer.size() < (bufferSize) \n";         
+      macBuffer.push(msg);  //insert 
  
-    if(macBuffer.size()==1 && isProcessing == false)  //do FIFO         
-    { 
-        AppMessage *amsg=macBuffer.front();  //access the first element             
-        macBuffer.pop();    //removes the first element 
+      if(macBuffer.size()==1 && isProcessing == false)  //do FIFO         
+      { 
+          AppMessage *amsg=macBuffer.front();  //access the first element             
+          macBuffer.pop();    //removes the first element 
+          mmsg=new MacMessage();            //generate MacMessage 
+          mmsg->setApplMsg(amsg);             
+          mmsg->setKind(MAC_MSG);           //encapsulate into MacMessge 
  
-        mmsg=new MacMessage();            //generate MacMessage 
-        mmsg->setApplMsg(amsg);             
-        mmsg->setKind(MAC_MSG);           //encapsulate into MacMessge 
+          backoffCounter=0;             
+          isProcessing = true; 
  
-        backoffCounter=0;             
-        isProcessing = true; 
- 
-        EV<< "sending carrier sense request to transceiver" << endl;             
+          EV<< "sending carrier sense request to transceiver" << endl;             
         
-        CSRequest* msgCSRequest = new CSRequest();             //send carrier sense request to transceiver             
-        msgCSRequest->setKind(CS_REQUEST);             
-        send(msgCSRequest,"mac2TxOut");                        //send out CSRequest to transceiver         
-      }     
-   }     
+          CSRequest* msgCSRequest = new CSRequest();             //send carrier sense request to transceiver             
+          msgCSRequest->setKind(CS_REQUEST);             
+          send(msgCSRequest,"mac2TxOut");                        //send out CSRequest to transceiver         
+        }     
+    }     
    
    else            //excess message are to be dropped     
    {         
@@ -248,73 +247,73 @@ void MAC::handleCarrierResponse(CSResponse *msg)
                 {                
                     isProcessing = false;             
                 }         
-             }     
-           }     
-           delete msg; 
-        } 
+            }     
+       }     
+       delete msg; 
+    } 
  
-       //MAC module sends self messages of type CSRequest after waiting backoff time 
-       void MAC::handleCarrierRequest(CSRequest *msg) 
-       {     
-            EV<<"Got self CSRequest, sending to Transceiver";     
-            msg->setKind(CS_REQUEST);     
-            send(msg,"mac2TxOut"); 
-        } 
+//MAC module sends self messages of type CSRequest after waiting backoff time 
+void MAC::handleCarrierRequest(CSRequest *msg) 
+{     
+      EV<<"Got self CSRequest, sending to Transceiver";     
+      msg->setKind(CS_REQUEST);     
+      send(msg,"mac2TxOut"); 
+} 
         
-        void MAC::handleTransmissionConfirm(TransmissionConfirm* msg) 
-        {     
-            /**  If the transceiver is in the transmit state 
-              *  when TransmissionRequest arrives, it responds with a message of type TransmissionConfirm     
-              *  in which the field status is set to statusBusy, the Transceiver does no further action.     
-              *  Transceiver sends statusOK when successful transmission after transition from sending to recv state. 
-            **/
+void MAC::handleTransmissionConfirm(TransmissionConfirm* msg) 
+{     
+    /**  If the transceiver is in the transmit state 
+      *  when TransmissionRequest arrives, it responds with a message of type TransmissionConfirm     
+      *  in which the field status is set to statusBusy, the Transceiver does no further action.     
+      *  Transceiver sends statusOK when successful transmission after transition from sending to recv state. 
+    **/
  
-           EV<<"handleTransmissionConfirm"<<endl;     
-           TransmissionConfirm* transConf= (TransmissionConfirm* )msg;     
-           if (transConf->getStatus()== statusBusy)        //statusBusy from TRansceiver     
-           {         
-                /**TODO perhaps some logging*/         
-                EV<<"Transceiver is busy."<<endl;     
-            }     
-            else if(transConf->getStatus()== statusOK) //statusOkay from TRansceiver     
-            {         
-                EV<<"Status is okay. Transmission is successful."<<endl;     
-            }     
-            delete msg;         //delete the message 
-         } 
+    EV<<"handleTransmissionConfirm"<<endl;     
+    TransmissionConfirm* transConf= (TransmissionConfirm* )msg;     
+    if (transConf->getStatus()== statusBusy)        //statusBusy from TRansceiver     
+    {         
+       /**TODO perhaps some logging*/         
+       EV<<"Transceiver is busy."<<endl;     
+     }     
+     else if(transConf->getStatus()== statusOK)     //statusOkay from TRansceiver     
+     {         
+        EV<<"Status is okay. Transmission is successful."<<endl;     
+     }     
+     delete msg;         //delete the message 
+} 
  
-        void MAC::handleTransmissionIndication(TransmissionIndication* msg) 
-        {     
-          //transmitter node should delete the message, receiver should process it     
-          if(strcmp(getParentModule()->getName(),"receiverNode") == 0)     
-          {         
-              EV<<"MAC::handleTransmissionIndication, on receiver node, processing message"; 
-      
-              if(msg->getMpkt() != nullptr)         
-              {             
-                    if(msg->getMpkt()->getApplMsg() != nullptr)     
-                    {                 
-                          AppMessage *applMsg = msg->getMpkt()->getApplMsg()->dup(); 
-                          delete msg->getMpkt()->getApplMsg();      
-                          applMsg->setKind(APP_MSG);    
-                          send(applMsg,"mac2PGoSOut");                 
-                          EV<<"Sending application message to packet Sink";   
-                     }
-               }         
+void MAC::handleTransmissionIndication(TransmissionIndication* msg) 
+{     
+  //transmitter node should delete the message, receiver should process it     
+  if(strcmp(getParentModule()->getName(),"receiverNode") == 0)     
+  {         
+      EV<<"MAC::handleTransmissionIndication, on receiver node, processing message"; 
+ 
+      if(msg->getMpkt() != nullptr)         
+      {             
+           if(msg->getMpkt()->getApplMsg() != nullptr)     
+           {                 
+                AppMessage *applMsg = msg->getMpkt()->getApplMsg()->dup(); 
+                delete msg->getMpkt()->getApplMsg();      
+                applMsg->setKind(APP_MSG);    
+                send(applMsg,"mac2PGoSOut");                 
+                EV<<"Sending application message to packet Sink";   
+           }
+       }         
                
-               else         
-               { 
-                    //shoud never reach here           
-                    EV << "MAC extracted an applMsg with a nullptr, sending nullptr to packetsink\n";     
-               }
-           }     
+       else         
+       { 
+          //shoud never reach here           
+          EV << "MAC extracted an applMsg with a nullptr, sending nullptr to packetsink\n";     
+       }
+   }     
            
-           else
-           {        
-                EV<<"MAC::handleTransmissionIndication, on transmitter node, dropping message"; 
-           }     
+  else
+  {        
+     EV<<"MAC::handleTransmissionIndication, on transmitter node, dropping message"; 
+  }     
            
-           delete msg->getMpkt();     
-           delete msg; 
-     }
+  delete msg->getMpkt();     
+  delete msg; 
+}
        
