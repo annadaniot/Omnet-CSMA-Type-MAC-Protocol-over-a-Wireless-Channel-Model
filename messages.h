@@ -37,4 +37,13 @@ enum {
  
  
  
-//Field in TransmissionConfim message. If the transceiver is in the transmit state //when TransmissionRequest arrives, it responds with a message of type TransmissionConfirm //in which the field status is set to statusBusy, the Transceiver does no further action. //Transceiver sends statusOK when successful transmission after transition from sending to recv state. #define statusOK 1 #define statusBusy 2 //enum transmissionStatus{statusBusy, statusOK}; 
+/** Field in TransmissionConfim message. If the transceiver is in the transmit state 
+  * when TransmissionRequest arrives, it responds with a message of type TransmissionConfirm 
+  * in which the field status is set to statusBusy, the Transceiver does no further action. 
+  * Transceiver sends statusOK when successful transmission after transition from sending to recv state. 
+*/
+  
+#define statusOK 1 
+#define statusBusy 2 
+
+// enum transmissionStatus{statusBusy, statusOK}; 
