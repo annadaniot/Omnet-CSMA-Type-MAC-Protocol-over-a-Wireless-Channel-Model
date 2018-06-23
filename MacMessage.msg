@@ -1,6 +1,15 @@
-cplusplus {{ #include "AppMessage_m.h" typedef AppMessage *AppMessagePtr; //typedef othertype 
-16 
+cplusplus {{ 
+ #include "AppMessage_m.h" 
+ typedef AppMessage *AppMessagePtr; //typedef othertype  
  
-}} class noncobject AppMessagePtr; 
+}} 
+
+class noncobject AppMessagePtr; 
  
-// // TODO generated message class // message MacMessage {     AppMessagePtr applMsg; }
+// 
+// TODO generated message class 
+// 
+
+message MacMessage {     
+  AppMessagePtr applMsg; 
+}
