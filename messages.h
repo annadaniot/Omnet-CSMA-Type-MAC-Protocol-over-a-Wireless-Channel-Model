@@ -1,4 +1,4 @@
-/** Author: Anna */
+/** Author: Anna, Haydn */
 
 #include <iostream> 
 #include <stdlib.h>     /* malloc, free, rand */ 
