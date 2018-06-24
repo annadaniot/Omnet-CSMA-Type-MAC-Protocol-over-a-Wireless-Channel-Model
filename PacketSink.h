@@ -16,3 +16,11 @@ class PacketSink : public cSimpleModule
  
    virtual void initialize();   
    virtual void handleMessage(cMessage *msg); 
+   virtual void finish();   
+   
+   public:     int statNumRecveivedPackets;     
+               std::string logFileName; 
+  }; 
+ 
+#endif 
+ 
