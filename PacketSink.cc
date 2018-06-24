@@ -1,3 +1,5 @@
+/** Author: Anna */
+
 #include "PacketSink.h" 
 #include "logging.h" 
  
@@ -29,4 +31,10 @@ void PacketSink::handleMessage(cMessage *msg)
  
 void PacketSink::finish() 
 {    
-    EV<<"Exit Packet Sink. Logging data"<<endl;     std::ofstream file;     file.open(logFileName, std::ios::app); //this appends to end of file     double R = getParentModule()->getParentModule()->par("R");     file << R << ", "<< statNumRecveivedPackets << endl;     file.close(); } 
+    EV<<"Exit Packet Sink. Logging data"<<endl;     
+    std::ofstream file;  
+    file.open(logFileName, std::ios::app); //this appends to end of file     
+    double R = getParentModule()->getParentModule()->par("R");
+    file << R << ", "<< statNumRecveivedPackets << endl;
+    file.close(); 
+} 
