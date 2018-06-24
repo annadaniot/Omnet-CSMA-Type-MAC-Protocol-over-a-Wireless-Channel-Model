@@ -26,4 +26,12 @@ AppMessage *PacketGenerator::generateMessage()
    return applMsg; 
 } 
 
-void PacketGenerator::handleMessage(cMessage *msg) {     if(msg==generatePacket)     {         scheduleAt(simTime() + exponential(iatDistribution/1000), msg);         AppMessage *applMsg =  generateMessage();         send(applMsg,"out");         EV<<"Generating application message."<<endl;         packetSent++; 
+void PacketGenerator::handleMessage(cMessage *msg) 
+{     
+   if(msg==generatePacket)     
+   {         
+      scheduleAt(simTime() + exponential(iatDistribution/1000), msg);       
+      AppMessage *applMsg =  generateMessage();
+      send(applMsg,"out");   
+      EV<<"Generating application message."<<endl; 
+      packetSent++; 
