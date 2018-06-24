@@ -1,3 +1,4 @@
+/** Author: Anna */
 simple PacketGenerator 
 {     
   parameters:  double iatDistribution = default(10);         
