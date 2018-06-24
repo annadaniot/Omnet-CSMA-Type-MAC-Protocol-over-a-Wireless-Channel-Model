@@ -1,11 +1,19 @@
-#ifndef __WSN_PACKETGENERATOR_H_ #define __WSN_PACKETGENERATOR_H_ 
+/** Author: Anna */
+
+#ifndef __WSN_PACKETGENERATOR_H_ 
+#define __WSN_PACKETGENERATOR_H_ 
  
-#include <omnetpp.h> #include "AppMessage_m.h" #include "messages.h" 
+#include <omnetpp.h> 
+#include "AppMessage_m.h" 
+#include "messages.h" 
  
  
 using namespace omnetpp; 
  
-/**  * TODO - Generated class  */ class PacketGenerator : public cSimpleModule {   protected:     double iatDistribution;     int messageSize;     int seqno;     int nodeID; //transmitter ID     int packetSent=0; 
+/**  * TODO - Generated class  */ 
+
+class PacketGenerator : public cSimpleModule 
+{   protected:     double iatDistribution;     int messageSize;     int seqno;     int nodeID; //transmitter ID     int packetSent=0; 
  
     cMessage *generatePacket; 
  
