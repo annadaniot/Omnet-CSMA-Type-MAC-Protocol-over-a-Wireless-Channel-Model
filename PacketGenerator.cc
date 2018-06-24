@@ -35,3 +35,16 @@ void PacketGenerator::handleMessage(cMessage *msg)
       send(applMsg,"out");   
       EV<<"Generating application message."<<endl; 
       packetSent++; 
+      EV<<"Packet Sent #:"<<packetSent<<endl;     
+   }     
+ 
+   else 
+   {        
+      delete msg;     
+   } 
+} 
+
+void PacketGenerator::finish() 
+{     
+   EV<<" Exit message generator."<<endl; 
+}
