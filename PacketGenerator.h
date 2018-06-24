@@ -13,14 +13,21 @@ using namespace omnetpp;
 /**  * TODO - Generated class  */ 
 
 class PacketGenerator : public cSimpleModule 
-{   protected:     double iatDistribution;     int messageSize;     int seqno;     int nodeID; //transmitter ID     int packetSent=0; 
+{   
+   protected:     double iatDistribution;     
+   int messageSize;     
+   int seqno;   
+   int nodeID; //transmitter ID     
+   int packetSent=0; 
  
-    cMessage *generatePacket; 
+   cMessage *generatePacket; 
  
-    std::stringstream out; //stream class to operate in out gate 
+   std::stringstream out; //stream class to operate in out gate 
  
-    AppMessage *generateMessage(); 
+   AppMessage *generateMessage(); 
  
-    virtual void initialize();     virtual void handleMessage(cMessage *msg);     virtual void finish(); }; 
+   virtual void initialize();     
+   virtual void handleMessage(cMessage *msg);   
+   virtual void finish(); }; 
  
 #endif 
