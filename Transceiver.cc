@@ -74,7 +74,6 @@ void Transceiver::finish()
    }
 } 
   
-
  //Called whenever the transceiver receives a message void Transceiver::handleMessage(cMessage *msg) {     EV << "Handling message";     short msgKind = msg->getKind();     EV << " cMessage received of kind " << msgKind << endl; 
  if(msgKind == TRANSMISSION_REQUEST || msgKind == TRANSMISSION_REQUEST_STATE_1 || msgKind == TRANSMISSION_REQUEST_STATE_2)
  {
@@ -100,7 +99,13 @@ void Transceiver::finish()
     SignalStop* msgSignalStop = check_and_cast<SignalStop *>(msg);      
     handleSignalStop(msgSignalStop);    
   }    
-  else if(msgKind == CS_RESPONSE){         EV << "Self message of CS_RESPONSE received\n";         CSResponse* msgSignalStop = check_and_cast<CSResponse *>(msg);         handleCSResponse(msgSignalStop);     }     else if(msgKind == BITRATE_WAIT){         EV << "Self message of BITRATE_WAIT received\n";         SignalStop* msgBitRateWait = check_and_cast<SignalStop *>(msg);         handleBitRateWait(msgBitRateWait);     } 
+  else if(msgKind == CS_RESPONSE)
+  {
+    EV << "Self message of CS_RESPONSE received\n";    
+    CSResponse* msgSignalStop = check_and_cast<CSResponse *>(msg); 
+    handleCSResponse(msgSignalStop);  
+  }
+  else if(msgKind == BITRATE_WAIT){         EV << "Self message of BITRATE_WAIT received\n";         SignalStop* msgBitRateWait = check_and_cast<SignalStop *>(msg);         handleBitRateWait(msgBitRateWait);     } 
  else
  {    
    //should never get here    
