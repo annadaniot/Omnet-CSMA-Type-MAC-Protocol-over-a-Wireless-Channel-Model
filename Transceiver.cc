@@ -243,3 +243,22 @@ void Transceiver::handleSignalStart(SignalStart *msg)
      return receivedPowerDBM; 
   } 
  
+   void Transceiver::handleSignalStop(SignalStop *msg){     EV << "SignalStop message received\n"; 
+ 
+    bool msgFound = false; //see if corresopnding signalStart message in currentTransmissionsList     SignalStart* currentSignalStart = nullptr; 
+ 
+    for(int i = 0; i<Nnodes ;i++){         currentSignalStart= currentTransmissionsList[i];         //        currentTransmissionsList[i] = nullptr; //dereference the msg in the list 
+ 
+        if(currentSignalStart != nullptr){             if(msg->getIdentifier() == currentSignalStart->getIdentifier()){                 msgFound = true; 
+ 
+                if(currentSignalStart->getCollidedFlag() == true){                     //delete SignalStop and SignalStart message, collided messages are always dropped                     EV << "Signal Stop received, collision detected, signalstop message dropped\n";                     packetsLost++;                     cancelAndDelete(currentTransmissionsList[i]);                     currentTransmissionsList[i]= nullptr;                 }                 else{                     double receivedPowerDBM = calcReceivedPowerDBM(currentSignalStart); 
+ 
+                    double signalToNoiseRatio = receivedPowerDBM - (noisePowerDBm + 10*log10(bitRate));                     EV << "signalToNoiseRatio : " << signalToNoiseRatio << endl; 
+ 
+                    double bitErrorRate = erfc(sqrt(2*pow(10,(signalToNoiseRatio/10))));                     EV << "bitErrorRate (Berror): " << bitErrorRate << endl; 
+ 
+                    int msgSize = currentSignalStart->getMacMsg()->getApplMsg()>getMsgSize() * 8;                     double packetErrorRate = 1 - pow((1 - bitErrorRate),msgSize);                     EV << "Packet Error Rate :" << packetErrorRate << endl;                     double u = ((double) rand() / (RAND_MAX)); 
+ 
+                    if(u<packetErrorRate){                         //drop message                         EV << "packet exceeds bit error rate, dropping\n"; 
+ 
+                        //TODO log packet dropped                     }                     else{                         //extract out MAC packet and put in transmissionindication                         EV << "Sending transmission indication message\n";                         TransmissionIndication* newTransmissionIndication = new TransmissionIndication();                         MacMessage* extractedMacMessage = currentSignalStart>getMacMsg()->dup(); //dup message, because deleting currentSignalStart in a few lines                         newTransmissionIndication->setMpkt(extractedMacMessage);                         newTransmissionIndication->setKind(TRANSMISSION_INDICATION);                         send(newTransmissionIndication, "tx2MacOut");                         //TODO log packet received                     }                     EV << "Removing SignalStart from currentTransmissionsList where ID = " << currentSignalStart->getIdentifier() << endl; 
