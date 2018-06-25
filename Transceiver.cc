@@ -188,4 +188,16 @@ void Transceiver::handleSignalStart(SignalStart *msg)
            double dBmRecvPower = -100; //set this to low number so if no transmissions the following statements wont detect one     
            int i;     
            for(i = 0;i<Nnodes ;i++ )
-           {             if(currentTransmissionsList[i] != nullptr){                 normalRecvPower = normalRecvPower + dBm2mW(calcReceivedPowerDBM(currentTransmissionsList[i]));             }         }         if(normalRecvPower != 0){             dBmRecvPower = mW2dBm(normalRecvPower);         }         //Collision detected, see if recv power is above threshold, if so set flag to true         if(dBmRecvPower > csThreshDBm){             for(i = 0;i<Nnodes ;i++ ){                 //possible for multiple transmissions to be on the channel but no collision (hidden terminal)                 if(currentTransmissionsList[i] != nullptr){                     currentTransmissionsList[i]->setCollidedFlag(true);                 }             }         }     }     //no need to delete msg here as it is stored in currentTransmissionsList } 
+           {         
+              if(currentTransmissionsList[i] != nullptr)
+              {
+                 normalRecvPower = normalRecvPower + dBm2mW(calcReceivedPowerDBM(currentTransmissionsList[i]));   
+              }    
+            }
+            if(normalRecvPower != 0)
+            {
+               dBmRecvPower = mW2dBm(normalRecvPower); 
+            }      
+         
+           //Collision detected, see if recv power is above threshold, if so set flag to true 
+           if(dBmRecvPower > csThreshDBm){             for(i = 0;i<Nnodes ;i++ ){                 //possible for multiple transmissions to be on the channel but no collision (hidden terminal)                 if(currentTransmissionsList[i] != nullptr){                     currentTransmissionsList[i]->setCollidedFlag(true);                 }             }         }     }     //no need to delete msg here as it is stored in currentTransmissionsList } 
