@@ -19,7 +19,11 @@ void Transceiver::initialize()
    noisePowerDBm = par("noisePowerDBm");  
    csTime = par("csTime"); 
  
-   Nnodes = getParentModule()->par("numTransmitters");     for(int i = 0; i<Nnodes; i++){         currentTransmissionsList[i] = nullptr;     } 
+   Nnodes = getParentModule()->par("numTransmitters");     
+   for(int i = 0; i<Nnodes; i++)
+   {         
+      currentTransmissionsList[i] = nullptr;
+   } 
  
     transceiverState = receive; 
  
