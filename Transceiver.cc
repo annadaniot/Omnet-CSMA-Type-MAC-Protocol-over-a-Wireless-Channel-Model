@@ -136,9 +136,17 @@ void Transceiver::handleBitRateWait(SignalStop* msg)
   //Send the message to itself after waiting turnAroundTime + time to send signalStop 
  } 
  
-void Transceiver::handleCSResponse(CSResponse* msg){     EV << "Sending CSResponse to MAC" << endl;     send(msg, "tx2MacOut"); } 
+void Transceiver::handleCSResponse(CSResponse* msg)
+{  
+   EV << "Sending CSResponse to MAC" << endl;  
+   send(msg, "tx2MacOut"); 
+} 
  
-//regardless of the state the transceiver is in, it has to process these messages //TODO do transmit power calculation here void Transceiver::handleSignalStart(SignalStart *msg){     EV << "handleSignalStart\n"; 
+//regardless of the state the transceiver is in, it has to process these messages 
+//TODO do transmit power calculation here 
+void Transceiver::handleSignalStart(SignalStart *msg)
+{     
+  EV << "handleSignalStart\n"; 
  
     int emptyIndex = -1;     int numberOfTransmissions = 0; 
 
