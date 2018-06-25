@@ -51,3 +51,9 @@ void Transceiver::handleCSResponse(CSResponse* msg){     EV << "Sending CSRespon
 //regardless of the state the transceiver is in, it has to process these messages //TODO do transmit power calculation here void Transceiver::handleSignalStart(SignalStart *msg){     EV << "handleSignalStart\n"; 
  
     int emptyIndex = -1;     int numberOfTransmissions = 0; 
+
+  //traverse list to see if the transmission is present     for(int i = 0;i<Nnodes; i++){         if(currentTransmissionsList[i] == nullptr){             emptyIndex = i; //for adding the message later             continue;         } 
+ 
+        //message in current transmissionslist         else if(msg->getIdentifier() == currentTransmissionsList[i]->getIdentifier()){             throw cRuntimeError("Received signalStart message but message already in current transmissions, aborting");             endSimulation();         }         else{             numberOfTransmissions++; //There should at most be one transmission at a time         }     } 
+ 
+    EV << "numberOfTransmissions: " << numberOfTransmissions << endl;     if(emptyIndex >=0){         //add message to currentTransmissionsList         currentTransmissionsList[emptyIndex] = msg;         numberOfTransmissions++;
