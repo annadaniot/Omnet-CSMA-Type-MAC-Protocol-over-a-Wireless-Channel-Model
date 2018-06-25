@@ -93,7 +93,14 @@ void Transceiver::finish()
     EV << "SIGNAL_START received\n";   
     SignalStart* msgSignalStart = check_and_cast<SignalStart *>(msg); 
     handleSignalStart(msgSignalStart);   
- }     else if(msgKind == SIGNAL_STOP){         EV << "SIGNAL_STOP received\n";         SignalStop* msgSignalStop = check_and_cast<SignalStop *>(msg);         handleSignalStop(msgSignalStop);     }     else if(msgKind == CS_RESPONSE){         EV << "Self message of CS_RESPONSE received\n";         CSResponse* msgSignalStop = check_and_cast<CSResponse *>(msg);         handleCSResponse(msgSignalStop);     }     else if(msgKind == BITRATE_WAIT){         EV << "Self message of BITRATE_WAIT received\n";         SignalStop* msgBitRateWait = check_and_cast<SignalStop *>(msg);         handleBitRateWait(msgBitRateWait);     } 
+ }  
+ else if(msgKind == SIGNAL_STOP)
+ { 
+    EV << "SIGNAL_STOP received\n";    
+    SignalStop* msgSignalStop = check_and_cast<SignalStop *>(msg);      
+    handleSignalStop(msgSignalStop);    
+  }    
+  else if(msgKind == CS_RESPONSE){         EV << "Self message of CS_RESPONSE received\n";         CSResponse* msgSignalStop = check_and_cast<CSResponse *>(msg);         handleCSResponse(msgSignalStop);     }     else if(msgKind == BITRATE_WAIT){         EV << "Self message of BITRATE_WAIT received\n";         SignalStop* msgBitRateWait = check_and_cast<SignalStop *>(msg);         handleBitRateWait(msgBitRateWait);     } 
  else
  {    
    //should never get here    
