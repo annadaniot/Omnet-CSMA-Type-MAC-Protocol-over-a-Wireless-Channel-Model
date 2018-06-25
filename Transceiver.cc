@@ -262,3 +262,21 @@ void Transceiver::handleSignalStart(SignalStart *msg)
                     if(u<packetErrorRate){                         //drop message                         EV << "packet exceeds bit error rate, dropping\n"; 
  
                         //TODO log packet dropped                     }                     else{                         //extract out MAC packet and put in transmissionindication                         EV << "Sending transmission indication message\n";                         TransmissionIndication* newTransmissionIndication = new TransmissionIndication();                         MacMessage* extractedMacMessage = currentSignalStart>getMacMsg()->dup(); //dup message, because deleting currentSignalStart in a few lines                         newTransmissionIndication->setMpkt(extractedMacMessage);                         newTransmissionIndication->setKind(TRANSMISSION_INDICATION);                         send(newTransmissionIndication, "tx2MacOut");                         //TODO log packet received                     }                     EV << "Removing SignalStart from currentTransmissionsList where ID = " << currentSignalStart->getIdentifier() << endl; 
+
+                    cancelAndDelete(currentSignalStart); //remove message also sets currentTransmissionsList[i] to nullptr                     currentTransmissionsList[i] = nullptr;                 }             }         }     } 
+ 
+    if(!msgFound){         throw cRuntimeError("Signal stop message received but no corresponding signalStart message in TransmissionsList. Aborting.");         endSimulation();     } 
+ 
+    delete msg; //remove the SignalStop message } 
+ 
+void Transceiver::handleTransmissionRequest(TransmissionRequest* msg){     EV << "TransmissionRequest message received\n"; 
+ 
+    long kind = msg->getKind(); //set context pointer to HandeTransmissionRequestState 
+ 
+    if(kind == TRANSMISSION_REQUEST){         if(transceiverState == receive){             transceiverState = transmit; 
+ 
+            //Wait for a time specified by the TurnaroundTime             msg->setKind(TRANSMISSION_REQUEST_STATE_1); //set context pointer to turnAroundState             scheduleAt(simTime()+turnAroundTime, msg); //Send the message to itself         }         else{ //respond with message of type TransmissionConfirm to the MAC with the field status set to statusBusy             EV <<"Transmission Request received but in the transmit state, sending statusBusy" << endl;             TransmissionConfirm* msgTransmissionConfirm = new TransmissionConfirm();             msgTransmissionConfirm->setStatus(statusBusy);             msgTransmissionConfirm->setKind(TRANSMISSION_CONFIRM);             send(msgTransmissionConfirm, "tx2MacOut"); 
+ 
+            cancelAndDelete(msg);         }     }     else if(kind == TRANSMISSION_REQUEST_STATE_1){         //extract message size, do this here before sending signal start as the receiver might delete the msg before extracting the length         //msgSize is bits, getMsgSize() is bytes         int msgSize = msg->getMacMsg()->getApplMsg()->getMsgSize() * 8;         double msgDelay = (double) msgSize/ (double) bitRate;         EV << "Extracted appmsg of size (bits) " << msgSize  << "\nSneding signal stop in "<< msgDelay << "seconds"<< endl; 
+ 
+        //signal start of transmission by sending message SignalStart to the channel         SignalStart* msgSignalStart = new SignalStart();         msgSignalStart->setTransmitPowerDBm(txPowerDBm);         msgSignalStart->setPositionX(getParentModule()->par("nodeXPosition"));         msgSignalStart->setPositionY(getParentModule()->par("nodeYPosition"));         msgSignalStart->setIdentifier(getParentModule()->par("nodeIdentifier"));         msgSignalStart->setCollidedFlag(false);         msgSignalStart->setKind(SIGNAL_START);         msgSignalStart->setMacMsg(msg->getMacMsg());         statNumSentPackets++;         send(msgSignalStart, "tx2ChanOut"); 
