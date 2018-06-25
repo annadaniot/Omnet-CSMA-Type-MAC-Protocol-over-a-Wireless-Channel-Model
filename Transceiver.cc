@@ -36,9 +36,13 @@ void Transceiver::initialize()
     }     
     else if(Nnodes == 1)
     {
-     //settings meet first test, log statNumSentPackets         TransceiverLogFileName = generate_log_file_name(par("TransceiverFile1").stringValue(), true);         EV << "Transceiver Using log file: " << TransceiverLogFileName << endl;     } //    statNumSentPackets = 0; //    packetsLost = 0; 
- 
-} 
+       //settings meet first test, log statNumSentPackets 
+       TransceiverLogFileName = generate_log_file_name(par("TransceiverFile1").stringValue(), true);  
+       EV << "Transceiver Using log file: " << TransceiverLogFileName << endl;
+    } 
+    //    statNumSentPackets = 0; 
+    //    packetsLost = 0; 
+ } 
  
 //called when the simulation finishes void Transceiver::finish() {     //do not delete anything or cancel timers, all cleanup must be done in the destructor     //use this for statistics     EV <<"NUM SENT PACKETS " << statNumSentPackets << endl;     std::ofstream file; 
 
