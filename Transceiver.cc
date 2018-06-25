@@ -94,12 +94,16 @@ void Transceiver::finish()
     SignalStart* msgSignalStart = check_and_cast<SignalStart *>(msg); 
     handleSignalStart(msgSignalStart);   
  }     else if(msgKind == SIGNAL_STOP){         EV << "SIGNAL_STOP received\n";         SignalStop* msgSignalStop = check_and_cast<SignalStop *>(msg);         handleSignalStop(msgSignalStop);     }     else if(msgKind == CS_RESPONSE){         EV << "Self message of CS_RESPONSE received\n";         CSResponse* msgSignalStop = check_and_cast<CSResponse *>(msg);         handleCSResponse(msgSignalStop);     }     else if(msgKind == BITRATE_WAIT){         EV << "Self message of BITRATE_WAIT received\n";         SignalStop* msgBitRateWait = check_and_cast<SignalStop *>(msg);         handleBitRateWait(msgBitRateWait);     } 
- 
- else{         //should never get here         //abort program 
- 
-        EV<<"Transceiver is dropping message of kind "<< (msg->getKind()) <<endl;         delete msg; 
- 
-        //        throw cRuntimeError("Unrecognised message, aborting");         //        endSimulation();     } } 
+ else
+ {    
+   //should never get here    
+   //abort program 
+   EV<<"Transceiver is dropping message of kind "<< (msg->getKind()) <<endl;     
+   delete msg; 
+    //        throw cRuntimeError("Unrecognised message, aborting");      
+    //        endSimulation();     
+  } 
+} 
  
 void Transceiver::handleBitRateWait(SignalStop* msg){     //program wated packetlen/bitrate, now send signal stop to channel     msg->setKind(SIGNAL_STOP);     send(msg,"tx2ChanOut"); 
  
