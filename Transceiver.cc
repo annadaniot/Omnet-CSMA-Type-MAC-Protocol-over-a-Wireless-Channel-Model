@@ -203,4 +203,14 @@ void Transceiver::handleSignalStart(SignalStart *msg)
            if(dBmRecvPower > csThreshDBm)
            {
               for(i = 0;i<Nnodes ;i++ )
-              {                 //possible for multiple transmissions to be on the channel but no collision (hidden terminal)                 if(currentTransmissionsList[i] != nullptr){                     currentTransmissionsList[i]->setCollidedFlag(true);                 }             }         }     }     //no need to delete msg here as it is stored in currentTransmissionsList } 
+              {                 
+                 //possible for multiple transmissions to be on the channel but no collision (hidden terminal)  
+                 if(currentTransmissionsList[i] != nullptr)
+                 {
+                    currentTransmissionsList[i]->setCollidedFlag(true);  
+                 }  
+               }
+            }
+        }
+     
+        //no need to delete msg here as it is stored in currentTransmissionsList } 
