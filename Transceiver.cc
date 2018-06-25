@@ -27,3 +27,4 @@ void Transceiver::initialize()
  
 } 
  
+//called when the simulation finishes void Transceiver::finish() {     //do not delete anything or cancel timers, all cleanup must be done in the destructor     //use this for statistics     EV <<"NUM SENT PACKETS " << statNumSentPackets << endl;     std::ofstream file; 
