@@ -24,7 +24,8 @@ void Transceiver::initialize()
     transceiverState = receive; 
  
     //logging     
-    if(strcmp(getParentModule()->getName(),"receiverNode")  == 0 && //check if conditions meet second tests, log packetsLost             Nnodes>1){         TransceiverLogFileName = generate_log_file_name(par("TransceiverFile2").stringValue(), true);         EV << "Transceiver Using log file: " << TransceiverLogFileName << endl;     }     else if(Nnodes == 1){//settings meet first test, log statNumSentPackets         TransceiverLogFileName = generate_log_file_name(par("TransceiverFile1").stringValue(), true);         EV << "Transceiver Using log file: " << TransceiverLogFileName << endl;     } //    statNumSentPackets = 0; //    packetsLost = 0; 
+    //check if conditions meet second tests, log packetsLost
+    if(strcmp(getParentModule()->getName(),"receiverNode")  == 0 &&              Nnodes>1){         TransceiverLogFileName = generate_log_file_name(par("TransceiverFile2").stringValue(), true);         EV << "Transceiver Using log file: " << TransceiverLogFileName << endl;     }     else if(Nnodes == 1){//settings meet first test, log statNumSentPackets         TransceiverLogFileName = generate_log_file_name(par("TransceiverFile1").stringValue(), true);         EV << "Transceiver Using log file: " << TransceiverLogFileName << endl;     } //    statNumSentPackets = 0; //    packetsLost = 0; 
  
 } 
  
