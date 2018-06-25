@@ -105,9 +105,14 @@ void Transceiver::finish()
     CSResponse* msgSignalStop = check_and_cast<CSResponse *>(msg); 
     handleCSResponse(msgSignalStop);  
   }
-  else if(msgKind == BITRATE_WAIT){         EV << "Self message of BITRATE_WAIT received\n";         SignalStop* msgBitRateWait = check_and_cast<SignalStop *>(msg);         handleBitRateWait(msgBitRateWait);     } 
- else
- {    
+  else if(msgKind == BITRATE_WAIT)
+  {
+     EV << "Self message of BITRATE_WAIT received\n";   
+     SignalStop* msgBitRateWait = check_and_cast<SignalStop *>(msg);   
+     handleBitRateWait(msgBitRateWait); 
+  } 
+  else
+  {    
    //should never get here    
    //abort program 
    EV<<"Transceiver is dropping message of kind "<< (msg->getKind()) <<endl;     
