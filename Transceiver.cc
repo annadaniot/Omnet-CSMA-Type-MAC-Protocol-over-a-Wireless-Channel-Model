@@ -128,7 +128,13 @@ void Transceiver::handleBitRateWait(SignalStop* msg)
   msg->setKind(SIGNAL_STOP);     
   send(msg,"tx2ChanOut"); 
  
-  TransmissionRequest* newMsg = new TransmissionRequest();     //Wait for a time specified by the TurnaroundTime     newMsg->setKind(TRANSMISSION_REQUEST_STATE_2); //set context pointer to turnAroundState     scheduleAt(simTime()+turnAroundTime, newMsg); //Send the message to itself after waiting turnAroundTime + time to send signalStop } 
+  TransmissionRequest* newMsg = new TransmissionRequest();     
+  //Wait for a time specified by the TurnaroundTime   
+  newMsg->setKind(TRANSMISSION_REQUEST_STATE_2); 
+  //set context pointer to turnAroundState
+  scheduleAt(simTime()+turnAroundTime, newMsg); 
+  //Send the message to itself after waiting turnAroundTime + time to send signalStop 
+ } 
  
 void Transceiver::handleCSResponse(CSResponse* msg){     EV << "Sending CSResponse to MAC" << endl;     send(msg, "tx2MacOut"); } 
  
