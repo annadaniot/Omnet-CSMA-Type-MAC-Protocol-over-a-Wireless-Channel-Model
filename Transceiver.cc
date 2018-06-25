@@ -35,3 +35,19 @@ void Transceiver::initialize()
  
     if(msgKind == TRANSMISSION_REQUEST ||             msgKind == TRANSMISSION_REQUEST_STATE_1 ||             msgKind == TRANSMISSION_REQUEST_STATE_2){         EV << "TRANSMISSION_REQUEST received\n";         TransmissionRequest* msgTransmissionRequest = check_and_cast<TransmissionRequest *>(msg);         handleTransmissionRequest(msgTransmissionRequest);     }     else if(msgKind == CS_REQUEST){         EV << "CS_REQUEST received\n";         CSRequest* msgCSResquest = dynamic_cast<CSRequest *>(msg);         handleCSRequest(msgCSResquest);     }     else if(msgKind == SIGNAL_START){         EV << "SIGNAL_START received\n";         SignalStart* msgSignalStart = check_and_cast<SignalStart *>(msg);         handleSignalStart(msgSignalStart);     }     else if(msgKind == SIGNAL_STOP){         EV << "SIGNAL_STOP received\n";         SignalStop* msgSignalStop = check_and_cast<SignalStop *>(msg);         handleSignalStop(msgSignalStop);     }     else if(msgKind == CS_RESPONSE){         EV << "Self message of CS_RESPONSE received\n";         CSResponse* msgSignalStop = check_and_cast<CSResponse *>(msg);         handleCSResponse(msgSignalStop);     }     else if(msgKind == BITRATE_WAIT){         EV << "Self message of BITRATE_WAIT received\n";         SignalStop* msgBitRateWait = check_and_cast<SignalStop *>(msg);         handleBitRateWait(msgBitRateWait);     } 
  
+ else{         //should never get here         //abort program 
+ 
+        EV<<"Transceiver is dropping message of kind "<< (msg->getKind()) <<endl;         delete msg; 
+ 
+        //        throw cRuntimeError("Unrecognised message, aborting");         //        endSimulation();     } } 
+ 
+void Transceiver::handleBitRateWait(SignalStop* msg){     //program wated packetlen/bitrate, now send signal stop to channel     msg->setKind(SIGNAL_STOP);     send(msg,"tx2ChanOut"); 
+ 
+ 
+    TransmissionRequest* newMsg = new TransmissionRequest();     //Wait for a time specified by the TurnaroundTime     newMsg->setKind(TRANSMISSION_REQUEST_STATE_2); //set context pointer to turnAroundState     scheduleAt(simTime()+turnAroundTime, newMsg); //Send the message to itself after waiting turnAroundTime + time to send signalStop } 
+ 
+void Transceiver::handleCSResponse(CSResponse* msg){     EV << "Sending CSResponse to MAC" << endl;     send(msg, "tx2MacOut"); } 
+ 
+//regardless of the state the transceiver is in, it has to process these messages //TODO do transmit power calculation here void Transceiver::handleSignalStart(SignalStart *msg){     EV << "handleSignalStart\n"; 
+ 
+    int emptyIndex = -1;     int numberOfTransmissions = 0; 
