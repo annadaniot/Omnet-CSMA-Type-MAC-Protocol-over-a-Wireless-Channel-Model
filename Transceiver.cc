@@ -200,4 +200,7 @@ void Transceiver::handleSignalStart(SignalStart *msg)
             }      
          
            //Collision detected, see if recv power is above threshold, if so set flag to true 
-           if(dBmRecvPower > csThreshDBm){             for(i = 0;i<Nnodes ;i++ ){                 //possible for multiple transmissions to be on the channel but no collision (hidden terminal)                 if(currentTransmissionsList[i] != nullptr){                     currentTransmissionsList[i]->setCollidedFlag(true);                 }             }         }     }     //no need to delete msg here as it is stored in currentTransmissionsList } 
+           if(dBmRecvPower > csThreshDBm)
+           {
+              for(i = 0;i<Nnodes ;i++ )
+              {                 //possible for multiple transmissions to be on the channel but no collision (hidden terminal)                 if(currentTransmissionsList[i] != nullptr){                     currentTransmissionsList[i]->setCollidedFlag(true);                 }             }         }     }     //no need to delete msg here as it is stored in currentTransmissionsList } 
