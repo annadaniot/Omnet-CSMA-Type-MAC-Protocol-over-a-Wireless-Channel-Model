@@ -221,7 +221,18 @@ void Transceiver::handleSignalStart(SignalStart *msg)
      //calculate euclidean distance between this node and the sender node 
      double euclideanDistance = sqrt(pow((SNRsignal->getPositionX()- (double) getParentModule()->par("nodeXPosition")),2)   
                                      + pow((SNRsignal->getPositionY()- (double) getParentModule()>par("nodeYPosition")),2));
-     EV << "euclideanDistance(m): " << euclideanDistance << endl;     //path loss calculation     double pathLossExponent = getParentModule()->getParentModule()>par("pathLossExponent");     double pathLoss; //dB     if(euclideanDistance > 1){         pathLoss = 10*log10(pow(euclideanDistance,pathLossExponent));     }     else{         pathLoss = 10*log10(1);     }     EV << "pathLoss (dB): " << pathLoss << endl;     //convert to DB domain 
+     EV << "euclideanDistance(m): " << euclideanDistance << endl; 
+     //path loss calculation   
+     double pathLossExponent = getParentModule()->getParentModule()>par("pathLossExponent");  
+     double pathLoss; //dB   
+     
+     if(euclideanDistance > 1)
+     {
+        pathLoss = 10*log10(pow(euclideanDistance,pathLossExponent));
+     }
+     else
+     {
+        pathLoss = 10*log10(1);     }     EV << "pathLoss (dB): " << pathLoss << endl;     //convert to DB domain 
  
     //pathLossDB and DBm incompatible     double receivedPowerDBM = SNRsignal->getTransmitPowerDBm() - pathLoss;     EV << "receivedPowerDBM (dBm): " << receivedPowerDBM << endl; 
  
