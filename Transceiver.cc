@@ -1,8 +1,14 @@
+/** Author: Haydn */
 #include "Transceiver.h" 
  
-#include <cmath> #include <ctgmath> 
+#include <cmath> 
+#include <ctgmath> 
  
-Define_Module(Transceiver); int statNumSentPackets = 0; //called when the simulation starts void Transceiver::initialize() {     EV << getParentModule()->getName() << ": initialsing Transceiver\n";     turnAroundTime = par("turnAroundTime");     txPowerDBm = par("txPowerDBm");     bitRate = par("bitRate");     csThreshDBm = par("csThreshDBm");     noisePowerDBm = par("noisePowerDBm");     csTime = par("csTime"); 
+Define_Module(Transceiver); 
+int statNumSentPackets = 0; 
+//called when the simulation starts 
+
+void Transceiver::initialize() {     EV << getParentModule()->getName() << ": initialsing Transceiver\n";     turnAroundTime = par("turnAroundTime");     txPowerDBm = par("txPowerDBm");     bitRate = par("bitRate");     csThreshDBm = par("csThreshDBm");     noisePowerDBm = par("noisePowerDBm");     csTime = par("csTime"); 
  
     Nnodes = getParentModule()->par("numTransmitters");     for(int i = 0; i<Nnodes; i++){         currentTransmissionsList[i] = nullptr;     } 
  
