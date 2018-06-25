@@ -232,9 +232,14 @@ void Transceiver::handleSignalStart(SignalStart *msg)
      }
      else
      {
-        pathLoss = 10*log10(1);     }     EV << "pathLoss (dB): " << pathLoss << endl;     //convert to DB domain 
+        pathLoss = 10*log10(1);  
+     }
+     EV << "pathLoss (dB): " << pathLoss << endl;     //convert to DB domain 
  
-    //pathLossDB and DBm incompatible     double receivedPowerDBM = SNRsignal->getTransmitPowerDBm() - pathLoss;     EV << "receivedPowerDBM (dBm): " << receivedPowerDBM << endl; 
+     //pathLossDB and DBm incompatible
+     double receivedPowerDBM = SNRsignal->getTransmitPowerDBm() - pathLoss;   
+     EV << "receivedPowerDBM (dBm): " << receivedPowerDBM << endl; 
  
-    return receivedPowerDBM; } 
+     return receivedPowerDBM; 
+  } 
  
