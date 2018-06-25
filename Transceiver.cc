@@ -81,7 +81,19 @@ void Transceiver::finish()
      EV << "TRANSMISSION_REQUEST received\n"; 
      TransmissionRequest* msgTransmissionRequest = check_and_cast<TransmissionRequest *>(msg);   
      handleTransmissionRequest(msgTransmissionRequest);
- }     else if(msgKind == CS_REQUEST){         EV << "CS_REQUEST received\n";         CSRequest* msgCSResquest = dynamic_cast<CSRequest *>(msg);         handleCSRequest(msgCSResquest);     }     else if(msgKind == SIGNAL_START){         EV << "SIGNAL_START received\n";         SignalStart* msgSignalStart = check_and_cast<SignalStart *>(msg);         handleSignalStart(msgSignalStart);     }     else if(msgKind == SIGNAL_STOP){         EV << "SIGNAL_STOP received\n";         SignalStop* msgSignalStop = check_and_cast<SignalStop *>(msg);         handleSignalStop(msgSignalStop);     }     else if(msgKind == CS_RESPONSE){         EV << "Self message of CS_RESPONSE received\n";         CSResponse* msgSignalStop = check_and_cast<CSResponse *>(msg);         handleCSResponse(msgSignalStop);     }     else if(msgKind == BITRATE_WAIT){         EV << "Self message of BITRATE_WAIT received\n";         SignalStop* msgBitRateWait = check_and_cast<SignalStop *>(msg);         handleBitRateWait(msgBitRateWait);     } 
+ }     
+ else if(msgKind == CS_REQUEST)
+ {
+    EV << "CS_REQUEST received\n";   
+    CSRequest* msgCSResquest = dynamic_cast<CSRequest *>(msg);       
+    handleCSRequest(msgCSResquest);  
+ }
+ else if(msgKind == SIGNAL_START)
+ { 
+    EV << "SIGNAL_START received\n";   
+    SignalStart* msgSignalStart = check_and_cast<SignalStart *>(msg); 
+    handleSignalStart(msgSignalStart);   
+ }     else if(msgKind == SIGNAL_STOP){         EV << "SIGNAL_STOP received\n";         SignalStop* msgSignalStop = check_and_cast<SignalStop *>(msg);         handleSignalStop(msgSignalStop);     }     else if(msgKind == CS_RESPONSE){         EV << "Self message of CS_RESPONSE received\n";         CSResponse* msgSignalStop = check_and_cast<CSResponse *>(msg);         handleCSResponse(msgSignalStop);     }     else if(msgKind == BITRATE_WAIT){         EV << "Self message of BITRATE_WAIT received\n";         SignalStop* msgBitRateWait = check_and_cast<SignalStop *>(msg);         handleBitRateWait(msgBitRateWait);     } 
  
  else{         //should never get here         //abort program 
  
