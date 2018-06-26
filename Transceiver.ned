@@ -1,3 +1,5 @@
+/** Author: Haydn */
+
 simple Transceiver 
 {     
       parameters:         //parameters can only be double, int, bool, string and xml     
