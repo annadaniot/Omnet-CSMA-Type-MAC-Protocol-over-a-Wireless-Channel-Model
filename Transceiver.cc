@@ -420,7 +420,16 @@ void Transceiver::handleTransmissionRequest(TransmissionRequest* msg)
     {
        dBmRecvPower = mW2dBm(normalRecvPower);
        EV << "Traversed current transmissions, calculated in dBm:" << dBmRecvPower << endl << "Threshold = " << csThreshDBm << endl; 
-      if(dBmRecvPower >= csThreshDBm){             EV << "dBmRecvPower >= csThreshDBm" << endl;             macResponse->setBusyChannel(true);         }     }     else{         EV << "Traversed current transmissions, no signals present" << endl;     } 
+      if(dBmRecvPower >= csThreshDBm)
+      {
+          EV << "dBmRecvPower >= csThreshDBm" << endl;    
+          macResponse->setBusyChannel(true);      
+      }
+    }
+    else
+    {   
+       EV << "Traversed current transmissions, no signals present" << endl;  
+    } 
  
     //if transceiver in the transmit state, tell MAC its busy     if(transceiverState == transmit){         EV << "Transceiver in transmit state" << endl; 
  macResponse->setBusyChannel(true);     } 
