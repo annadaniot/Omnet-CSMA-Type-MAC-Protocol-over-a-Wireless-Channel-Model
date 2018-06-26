@@ -243,11 +243,16 @@ void Transceiver::handleSignalStart(SignalStart *msg)
      return receivedPowerDBM; 
   } 
  
-   void Transceiver::handleSignalStop(SignalStop *msg){     EV << "SignalStop message received\n"; 
+   void Transceiver::handleSignalStop(SignalStop *msg)
+   {
+    
+      EV << "SignalStop message received\n"; 
+      bool msgFound = false; //see if corresopnding signalStart message in currentTransmissionsList    
+      SignalStart* currentSignalStart = nullptr; 
  
-    bool msgFound = false; //see if corresopnding signalStart message in currentTransmissionsList     SignalStart* currentSignalStart = nullptr; 
- 
-    for(int i = 0; i<Nnodes ;i++){         currentSignalStart= currentTransmissionsList[i];         //        currentTransmissionsList[i] = nullptr; //dereference the msg in the list 
+      for(int i = 0; i<Nnodes ;i++)
+      {
+         currentSignalStart= currentTransmissionsList[i];         //        currentTransmissionsList[i] = nullptr; //dereference the msg in the list 
  
         if(currentSignalStart != nullptr){             if(msg->getIdentifier() == currentSignalStart->getIdentifier()){                 msgFound = true; 
  
