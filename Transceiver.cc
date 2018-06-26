@@ -378,9 +378,17 @@ void Transceiver::handleTransmissionRequest(TransmissionRequest* msg)
        scheduleAt(simTime() + msgDelay, msgSignalStop); //This message will trigger TRANSMISSION_REQUEST_STATE_2
        cancelAndDelete(msg); 
  
-    }     else if(kind == TRANSMISSION_REQUEST_STATE_2){         transceiverState = receive;         TransmissionConfirm* msgTransmissionConfirm = new TransmissionConfirm();         msgTransmissionConfirm->setKind(TRANSMISSION_CONFIRM);         msgTransmissionConfirm->setStatus(statusOK);         send(msgTransmissionConfirm, "tx2MacOut"); 
- 
-        //finally delete the message         cancelAndDelete(msg);     } } 
+    }    
+   else if(kind == TRANSMISSION_REQUEST_STATE_2)
+   {
+      transceiverState = receive;  
+      TransmissionConfirm* msgTransmissionConfirm = new TransmissionConfirm();
+      msgTransmissionConfirm->setKind(TRANSMISSION_CONFIRM);     
+      msgTransmissionConfirm->setStatus(statusOK);
+      send(msgTransmissionConfirm, "tx2MacOut"); 
+     
+      //finally delete the message   
+      cancelAndDelete(msg);     } } 
  
 //Calculates the current signal power (in dBm) observed on the channel. //Then waits csTime parameter //Sends back CSResponse with busy channel field which is True when the current signal power observed in the first step exceeds the value //of the paramter csThreshDBm otherwise false. // https://stackoverflow.com/questions/4089726/how-do-i-cast-a-parent-class-as-thechild-class void Transceiver::handleCSRequest(CSRequest *msg){ 
  
