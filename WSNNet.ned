@@ -1,3 +1,5 @@
+/** Author: Anna */
+
 //simulation 12.1.1 
 //one chan, receiver and transmitter, vary R between 1 and 40m in steps of 1m 
 //set iatDistribution in the packetgenerator to have a deterministic distribution with a period of 10ms 
