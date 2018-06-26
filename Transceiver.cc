@@ -314,9 +314,12 @@ void Transceiver::handleSignalStart(SignalStart *msg)
  
     if(!msgFound)
     {
-       throw cRuntimeError("Signal stop message received but no corresponding signalStart message in TransmissionsList. Aborting.");         endSimulation();     } 
+       throw cRuntimeError("Signal stop message received but no corresponding signalStart message in TransmissionsList. Aborting."); 
+       endSimulation();   
+    } 
  
-    delete msg; //remove the SignalStop message } 
+    delete msg; //remove the SignalStop message 
+ } 
  
 void Transceiver::handleTransmissionRequest(TransmissionRequest* msg){     EV << "TransmissionRequest message received\n"; 
  
