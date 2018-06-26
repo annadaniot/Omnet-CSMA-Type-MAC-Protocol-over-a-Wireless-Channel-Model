@@ -60,9 +60,11 @@ class Transceiver : public cSimpleModule
          string TransceiverLogFileName; 
  
  
-    //list of current transmissions. On compile set length to number of nodes in the simulation     //        currentTransmissions currentTransmissionsList[getParentModule()>par("TransmitterNodes")];     SignalStart* currentTransmissionsList[MAX_TRANSCEIVER_COUNT]; 
+         //list of current transmissions. On compile set length to number of nodes in the simulation    
+         //        currentTransmissions currentTransmissionsList[getParentModule()>par("TransmitterNodes")];   
+         SignalStart* currentTransmissionsList[MAX_TRANSCEIVER_COUNT]; 
  
-    RecvTransState transceiverState; }; 
- 
-#endif 
+         RecvTransState transceiverState; 
+      }; 
+     #endif 
  
