@@ -388,9 +388,14 @@ void Transceiver::handleTransmissionRequest(TransmissionRequest* msg)
       send(msgTransmissionConfirm, "tx2MacOut"); 
      
       //finally delete the message   
-      cancelAndDelete(msg);     } } 
+      cancelAndDelete(msg);    
+     }
+  } 
  
-//Calculates the current signal power (in dBm) observed on the channel. //Then waits csTime parameter //Sends back CSResponse with busy channel field which is True when the current signal power observed in the first step exceeds the value //of the paramter csThreshDBm otherwise false. // https://stackoverflow.com/questions/4089726/how-do-i-cast-a-parent-class-as-thechild-class void Transceiver::handleCSRequest(CSRequest *msg){ 
+  //Calculates the current signal power (in dBm) observed on the channel. 
+  //Then waits csTime parameter 
+  //Sends back CSResponse with busy channel field which is True when the current signal power observed in the first step exceeds the value 
+  //of the paramter csThreshDBm otherwise false. // https://stackoverflow.com/questions/4089726/how-do-i-cast-a-parent-class-as-thechild-class void Transceiver::handleCSRequest(CSRequest *msg){ 
  
     EV << "CSRequest message received\n";     CSResponse* macResponse = new CSResponse(); //create message     bool SignalPresent = false;     double normalRecvPower = 0;     double dBmRecvPower = -1000;     //traverse currentTransmissionsList     for(int i = 0;i<Nnodes; i++){         SignalStart* curSignalStart = currentTransmissionsList[i];         if(curSignalStart != nullptr){             SignalPresent = true;             normalRecvPower = normalRecvPower + dBm2mW(calcReceivedPowerDBM(curSignalStart));         }     }     macResponse->setBusyChannel(false);     if(SignalPresent){         dBmRecvPower = mW2dBm(normalRecvPower);         EV << "Traversed current transmissions, calculated in dBm:" << dBmRecvPower << endl << "Threshold = " << csThreshDBm << endl;         if(dBmRecvPower >= csThreshDBm){             EV << "dBmRecvPower >= csThreshDBm" << endl;             macResponse->setBusyChannel(true);         }     }     else{         EV << "Traversed current transmissions, no signals present" << endl;     } 
  
