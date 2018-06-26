@@ -332,8 +332,11 @@ void Transceiver::handleTransmissionRequest(TransmissionRequest* msg)
       if(transceiverState == receive)
       {
          transceiverState = transmit; 
- 
-            //Wait for a time specified by the TurnaroundTime             msg->setKind(TRANSMISSION_REQUEST_STATE_1); //set context pointer to turnAroundState             scheduleAt(simTime()+turnAroundTime, msg); //Send the message to itself         }         else{ //respond with message of type TransmissionConfirm to the MAC with the field status set to statusBusy             EV <<"Transmission Request received but in the transmit state, sending statusBusy" << endl;             TransmissionConfirm* msgTransmissionConfirm = new TransmissionConfirm();             msgTransmissionConfirm->setStatus(statusBusy);             msgTransmissionConfirm->setKind(TRANSMISSION_CONFIRM);             send(msgTransmissionConfirm, "tx2MacOut"); 
+         
+         //Wait for a time specified by the TurnaroundTime       
+         msg->setKind(TRANSMISSION_REQUEST_STATE_1); //set context pointer to turnAroundState    
+         scheduleAt(simTime()+turnAroundTime, msg); //Send the message to itself      
+      }         else{ //respond with message of type TransmissionConfirm to the MAC with the field status set to statusBusy             EV <<"Transmission Request received but in the transmit state, sending statusBusy" << endl;             TransmissionConfirm* msgTransmissionConfirm = new TransmissionConfirm();             msgTransmissionConfirm->setStatus(statusBusy);             msgTransmissionConfirm->setKind(TRANSMISSION_CONFIRM);             send(msgTransmissionConfirm, "tx2MacOut"); 
  
             cancelAndDelete(msg);         }     }     else if(kind == TRANSMISSION_REQUEST_STATE_1){         //extract message size, do this here before sending signal start as the receiver might delete the msg before extracting the length         //msgSize is bits, getMsgSize() is bytes         int msgSize = msg->getMacMsg()->getApplMsg()->getMsgSize() * 8;         double msgDelay = (double) msgSize/ (double) bitRate;         EV << "Extracted appmsg of size (bits) " << msgSize  << "\nSneding signal stop in "<< msgDelay << "seconds"<< endl; 
  
