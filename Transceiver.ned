@@ -10,4 +10,9 @@ simple Transceiver
               int nunTransmitters = default(1);     
               string TransceiverFile1 = "transceiverLog1";                  //for the first set of simulations    
               string TransceiverFile2 = "transceiverLog2";                  //for the second set of simulations, only receiver node has access to this file     
-      gates:        input tx2MacIn;        output tx2MacOut;        input tx2ChanIn;         output tx2ChanOut; } 
+      gates:        
+              input tx2MacIn;   
+              output tx2MacOut; 
+              input tx2ChanIn;   
+              output tx2ChanOut; 
+ } 
