@@ -280,11 +280,16 @@ void Transceiver::handleSignalStart(SignalStart *msg)
                  
                    int msgSize = currentSignalStart->getMacMsg()->getApplMsg()>getMsgSize() * 8; 
                    double packetErrorRate = 1 - pow((1 - bitErrorRate),msgSize);     
-                 EV << "Packet Error Rate :" << packetErrorRate << endl;                     double u = ((double) rand() / (RAND_MAX)); 
+                   EV << "Packet Error Rate :" << packetErrorRate << endl;   
+                   double u = ((double) rand() / (RAND_MAX)); 
  
-                    if(u<packetErrorRate){                         //drop message                         EV << "packet exceeds bit error rate, dropping\n"; 
+                   if(u<packetErrorRate)
+                   {
+                      //drop message  
+                      EV << "packet exceeds bit error rate, dropping\n"; 
  
-                        //TODO log packet dropped                     }                     else{                         //extract out MAC packet and put in transmissionindication                         EV << "Sending transmission indication message\n";                         TransmissionIndication* newTransmissionIndication = new TransmissionIndication();                         MacMessage* extractedMacMessage = currentSignalStart>getMacMsg()->dup(); //dup message, because deleting currentSignalStart in a few lines                         newTransmissionIndication->setMpkt(extractedMacMessage);                         newTransmissionIndication->setKind(TRANSMISSION_INDICATION);                         send(newTransmissionIndication, "tx2MacOut");                         //TODO log packet received                     }                     EV << "Removing SignalStart from currentTransmissionsList where ID = " << currentSignalStart->getIdentifier() << endl; 
+                       //TODO log packet dropped  
+                   }                     else{                         //extract out MAC packet and put in transmissionindication                         EV << "Sending transmission indication message\n";                         TransmissionIndication* newTransmissionIndication = new TransmissionIndication();                         MacMessage* extractedMacMessage = currentSignalStart>getMacMsg()->dup(); //dup message, because deleting currentSignalStart in a few lines                         newTransmissionIndication->setMpkt(extractedMacMessage);                         newTransmissionIndication->setKind(TRANSMISSION_INDICATION);                         send(newTransmissionIndication, "tx2MacOut");                         //TODO log packet received                     }                     EV << "Removing SignalStart from currentTransmissionsList where ID = " << currentSignalStart->getIdentifier() << endl; 
 
                     cancelAndDelete(currentSignalStart); //remove message also sets currentTransmissionsList[i] to nullptr                     currentTransmissionsList[i] = nullptr;                 }             }         }     } 
  
