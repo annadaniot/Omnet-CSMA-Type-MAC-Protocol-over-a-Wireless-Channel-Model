@@ -35,8 +35,17 @@ class Transceiver : public cSimpleModule
     
     enum RecvTransState{receive, transmit}; 
  
-public:     virtual void initialize();     virtual void finish();     void handleMessage(cMessage *msg);     void handleTransmissionRequest(TransmissionRequest *msg);     void handleSignalStart(SignalStart *msg);     void handleSignalStop(SignalStop *msg); 
- void handleCSRequest(CSRequest *msg);     void handleCSResponse(CSResponse* msg);     void handleBitRateWait(SignalStop* msg);     double calcReceivedPowerDBM(SignalStart* SNRsignal); 
+    public:     
+        virtual void initialize();    
+        virtual void finish();   
+        void handleMessage(cMessage *msg);  
+        void handleTransmissionRequest(TransmissionRequest *msg);
+        void handleSignalStart(SignalStart *msg);     
+        void handleSignalStop(SignalStop *msg); 
+        void handleCSRequest(CSRequest *msg);   
+        void handleCSResponse(CSResponse* msg);   
+        void handleBitRateWait(SignalStop* msg); 
+        double calcReceivedPowerDBM(SignalStart* SNRsignal); 
  
  
 private:     volatile double turnAroundTime;     volatile double txPowerDBm; //radiated power in dBm^2     int bitRate;//specifies the transmission bitrate in bits/s     volatile double csThreshDBm;//specifies the observed signal power (in dBm) aboce which a carrier-sensing station will indicate the medium as busy.     volatile double noisePowerDBm;//specifies the nose power (which here we purport to be expressed in units of dBm, which is not entierly correct).     volatile double csTime;     int Nnodes; //     int statNumSentPackets=0;      int packetsLost=0;     string TransceiverLogFileName; 
