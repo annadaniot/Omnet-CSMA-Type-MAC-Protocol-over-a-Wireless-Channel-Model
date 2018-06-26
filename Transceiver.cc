@@ -321,11 +321,17 @@ void Transceiver::handleSignalStart(SignalStart *msg)
     delete msg; //remove the SignalStop message 
  } 
  
-void Transceiver::handleTransmissionRequest(TransmissionRequest* msg){     EV << "TransmissionRequest message received\n"; 
+void Transceiver::handleTransmissionRequest(TransmissionRequest* msg)
+{ 
+   EV << "TransmissionRequest message received\n"; 
+   
+   long kind = msg->getKind(); //set context pointer to HandeTransmissionRequestState 
  
-    long kind = msg->getKind(); //set context pointer to HandeTransmissionRequestState 
- 
-    if(kind == TRANSMISSION_REQUEST){         if(transceiverState == receive){             transceiverState = transmit; 
+   if(kind == TRANSMISSION_REQUEST) 
+   {
+      if(transceiverState == receive)
+      {
+         transceiverState = transmit; 
  
             //Wait for a time specified by the TurnaroundTime             msg->setKind(TRANSMISSION_REQUEST_STATE_1); //set context pointer to turnAroundState             scheduleAt(simTime()+turnAroundTime, msg); //Send the message to itself         }         else{ //respond with message of type TransmissionConfirm to the MAC with the field status set to statusBusy             EV <<"Transmission Request received but in the transmit state, sending statusBusy" << endl;             TransmissionConfirm* msgTransmissionConfirm = new TransmissionConfirm();             msgTransmissionConfirm->setStatus(statusBusy);             msgTransmissionConfirm->setKind(TRANSMISSION_CONFIRM);             send(msgTransmissionConfirm, "tx2MacOut"); 
  
