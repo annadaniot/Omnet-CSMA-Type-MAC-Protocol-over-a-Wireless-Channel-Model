@@ -404,7 +404,18 @@ void Transceiver::handleTransmissionRequest(TransmissionRequest* msg)
    double dBmRecvPower = -1000;   
    //traverse currentTransmissionsList     
     
-   for(int i = 0;i<Nnodes; i++){         SignalStart* curSignalStart = currentTransmissionsList[i];         if(curSignalStart != nullptr){             SignalPresent = true;             normalRecvPower = normalRecvPower + dBm2mW(calcReceivedPowerDBM(curSignalStart));         }     }     macResponse->setBusyChannel(false);     if(SignalPresent){         dBmRecvPower = mW2dBm(normalRecvPower);         EV << "Traversed current transmissions, calculated in dBm:" << dBmRecvPower << endl << "Threshold = " << csThreshDBm << endl;         if(dBmRecvPower >= csThreshDBm){             EV << "dBmRecvPower >= csThreshDBm" << endl;             macResponse->setBusyChannel(true);         }     }     else{         EV << "Traversed current transmissions, no signals present" << endl;     } 
+   for(int i = 0;i<Nnodes; i++)
+   {
+       SignalStart* curSignalStart = currentTransmissionsList[i]; 
+       if(curSignalStart != nullptr)
+       {
+          SignalPresent = true;  
+          normalRecvPower = normalRecvPower + dBm2mW(calcReceivedPowerDBM(curSignalStart));
+       }
+    }
+   
+    macResponse->setBusyChannel(false);
+   if(SignalPresent){         dBmRecvPower = mW2dBm(normalRecvPower);         EV << "Traversed current transmissions, calculated in dBm:" << dBmRecvPower << endl << "Threshold = " << csThreshDBm << endl;         if(dBmRecvPower >= csThreshDBm){             EV << "dBmRecvPower >= csThreshDBm" << endl;             macResponse->setBusyChannel(true);         }     }     else{         EV << "Traversed current transmissions, no signals present" << endl;     } 
  
     //if transceiver in the transmit state, tell MAC its busy     if(transceiverState == transmit){         EV << "Transceiver in transmit state" << endl; 
  macResponse->setBusyChannel(true);     } 
