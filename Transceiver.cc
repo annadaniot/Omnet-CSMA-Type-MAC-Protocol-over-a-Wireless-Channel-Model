@@ -365,11 +365,18 @@ void Transceiver::handleTransmissionRequest(TransmissionRequest* msg)
        msgSignalStart->setPositionY(getParentModule()->par("nodeYPosition"));   
        msgSignalStart->setIdentifier(getParentModule()->par("nodeIdentifier"));  
        msgSignalStart->setCollidedFlag(false);
-       msgSignalStart->setKind(SIGNAL_START);         msgSignalStart->setMacMsg(msg->getMacMsg());         statNumSentPackets++;         send(msgSignalStart, "tx2ChanOut"); 
+       msgSignalStart->setKind(SIGNAL_START);  
+       msgSignalStart->setMacMsg(msg->getMacMsg()); 
+       statNumSentPackets++;      
+       send(msgSignalStart, "tx2ChanOut"); 
 
-      //start creation of signal stop         SignalStop* msgSignalStop = new SignalStop(); //signal stop contains no feilds         msgSignalStop->setKind(BITRATE_WAIT);         msgSignalStop->setIdentifier(getParentModule()->par("nodeIdentifier")); 
+       //start creation of signal stop    
+       SignalStop* msgSignalStop = new SignalStop(); //signal stop contains no feilds 
+       msgSignalStop->setKind(BITRATE_WAIT);      
+       msgSignalStop->setIdentifier(getParentModule()->par("nodeIdentifier")); 
  
-        scheduleAt(simTime() + msgDelay, msgSignalStop); //This message will trigger TRANSMISSION_REQUEST_STATE_2         cancelAndDelete(msg); 
+       scheduleAt(simTime() + msgDelay, msgSignalStop); //This message will trigger TRANSMISSION_REQUEST_STATE_2
+       cancelAndDelete(msg); 
  
     }     else if(kind == TRANSMISSION_REQUEST_STATE_2){         transceiverState = receive;         TransmissionConfirm* msgTransmissionConfirm = new TransmissionConfirm();         msgTransmissionConfirm->setKind(TRANSMISSION_CONFIRM);         msgTransmissionConfirm->setStatus(statusOK);         send(msgTransmissionConfirm, "tx2MacOut"); 
  
