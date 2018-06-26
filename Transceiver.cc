@@ -296,8 +296,14 @@ void Transceiver::handleSignalStart(SignalStart *msg)
                       EV << "Sending transmission indication message\n";     
                       TransmissionIndication* newTransmissionIndication = new TransmissionIndication();  
                       MacMessage* extractedMacMessage = currentSignalStart>getMacMsg()->dup(); //dup message, because deleting currentSignalStart in a few lines                
-                      
-                      newTransmissionIndication->setMpkt(extractedMacMessage);                         newTransmissionIndication->setKind(TRANSMISSION_INDICATION);                         send(newTransmissionIndication, "tx2MacOut");                         //TODO log packet received                     }                     EV << "Removing SignalStart from currentTransmissionsList where ID = " << currentSignalStart->getIdentifier() << endl; 
+                                          
+                      newTransmissionIndication->setMpkt(extractedMacMessage);  
+                      newTransmissionIndication->setKind(TRANSMISSION_INDICATION);
+                      send(newTransmissionIndication, "tx2MacOut");   
+                      //TODO log packet received         
+                     }
+                 
+                     EV << "Removing SignalStart from currentTransmissionsList where ID = " << currentSignalStart->getIdentifier() << endl; 
 
                     cancelAndDelete(currentSignalStart); //remove message also sets currentTransmissionsList[i] to nullptr                     currentTransmissionsList[i] = nullptr;                 }             }         }     } 
  
