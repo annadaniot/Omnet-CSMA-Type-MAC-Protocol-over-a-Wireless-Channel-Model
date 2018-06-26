@@ -305,9 +305,16 @@ void Transceiver::handleSignalStart(SignalStart *msg)
                  
                      EV << "Removing SignalStart from currentTransmissionsList where ID = " << currentSignalStart->getIdentifier() << endl; 
 
-                    cancelAndDelete(currentSignalStart); //remove message also sets currentTransmissionsList[i] to nullptr                     currentTransmissionsList[i] = nullptr;                 }             }         }     } 
+                    cancelAndDelete(currentSignalStart); //remove message also sets currentTransmissionsList[i] to nullptr   
+                    currentTransmissionsList[i] = nullptr; 
+                  }
+              }
+        }
+     } 
  
-    if(!msgFound){         throw cRuntimeError("Signal stop message received but no corresponding signalStart message in TransmissionsList. Aborting.");         endSimulation();     } 
+    if(!msgFound)
+    {
+       throw cRuntimeError("Signal stop message received but no corresponding signalStart message in TransmissionsList. Aborting.");         endSimulation();     } 
  
     delete msg; //remove the SignalStop message } 
  
