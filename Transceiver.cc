@@ -415,7 +415,12 @@ void Transceiver::handleTransmissionRequest(TransmissionRequest* msg)
     }
    
     macResponse->setBusyChannel(false);
-   if(SignalPresent){         dBmRecvPower = mW2dBm(normalRecvPower);         EV << "Traversed current transmissions, calculated in dBm:" << dBmRecvPower << endl << "Threshold = " << csThreshDBm << endl;         if(dBmRecvPower >= csThreshDBm){             EV << "dBmRecvPower >= csThreshDBm" << endl;             macResponse->setBusyChannel(true);         }     }     else{         EV << "Traversed current transmissions, no signals present" << endl;     } 
+   
+    if(SignalPresent)
+    {
+       dBmRecvPower = mW2dBm(normalRecvPower);
+       EV << "Traversed current transmissions, calculated in dBm:" << dBmRecvPower << endl << "Threshold = " << csThreshDBm << endl; 
+      if(dBmRecvPower >= csThreshDBm){             EV << "dBmRecvPower >= csThreshDBm" << endl;             macResponse->setBusyChannel(true);         }     }     else{         EV << "Traversed current transmissions, no signals present" << endl;     } 
  
     //if transceiver in the transmit state, tell MAC its busy     if(transceiverState == transmit){         EV << "Transceiver in transmit state" << endl; 
  macResponse->setBusyChannel(true);     } 
@@ -423,3 +428,4 @@ void Transceiver::handleTransmissionRequest(TransmissionRequest* msg)
     macResponse->setKind(CS_RESPONSE);     EV << "Sending CS_RESPONSE with BusyChannel: " << macResponse->getBusyChannel() << endl;     EV << "CS_RESPOSE will arrive at T= " << simTime() + csTime << endl;     //wait for a time corresponding to the csTime parameter     scheduleAt(simTime()+csTime, macResponse);     //    sendDelayed(macResponse, simTime() + csTime, "tx2MacOut"); 
  
     delete msg; }
+
