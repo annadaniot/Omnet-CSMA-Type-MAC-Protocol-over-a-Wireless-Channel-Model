@@ -263,9 +263,16 @@ void Transceiver::handleSignalStart(SignalStart *msg)
                 msgFound = true; 
  
                 if(currentSignalStart->getCollidedFlag() == true)
-                {                     //delete SignalStop and SignalStart message, collided messages are always dropped                     EV << "Signal Stop received, collision detected, signalstop message dropped\n";                     packetsLost++;                     cancelAndDelete(currentTransmissionsList[i]);                     currentTransmissionsList[i]= nullptr;                 }                 else{                     double receivedPowerDBM = calcReceivedPowerDBM(currentSignalStart); 
- 
-                    double signalToNoiseRatio = receivedPowerDBM - (noisePowerDBm + 10*log10(bitRate));                     EV << "signalToNoiseRatio : " << signalToNoiseRatio << endl; 
+                {                    
+                   //delete SignalStop and SignalStart message, collided messages are always dropped
+                   EV << "Signal Stop received, collision detected, signalstop message dropped\n";   
+                   packetsLost++;    
+                   cancelAndDelete(currentTransmissionsList[i]);  
+                   currentTransmissionsList[i]= nullptr;    
+                }
+                else{          
+                   double receivedPowerDBM = calcReceivedPowerDBM(currentSignalStart); 
+                   double signalToNoiseRatio = receivedPowerDBM - (noisePowerDBm + 10*log10(bitRate));                     EV << "signalToNoiseRatio : " << signalToNoiseRatio << endl; 
  
                     double bitErrorRate = erfc(sqrt(2*pow(10,(signalToNoiseRatio/10))));                     EV << "bitErrorRate (Berror): " << bitErrorRate << endl; 
  
