@@ -65,6 +65,6 @@ class Transceiver : public cSimpleModule
          SignalStart* currentTransmissionsList[MAX_TRANSCEIVER_COUNT]; 
  
          RecvTransState transceiverState; 
-      }; 
-     #endif 
+    }; 
+    #endif 
  
