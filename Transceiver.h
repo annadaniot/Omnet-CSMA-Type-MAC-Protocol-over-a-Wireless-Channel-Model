@@ -48,7 +48,16 @@ class Transceiver : public cSimpleModule
         double calcReceivedPowerDBM(SignalStart* SNRsignal); 
  
  
-private:     volatile double turnAroundTime;     volatile double txPowerDBm; //radiated power in dBm^2     int bitRate;//specifies the transmission bitrate in bits/s     volatile double csThreshDBm;//specifies the observed signal power (in dBm) aboce which a carrier-sensing station will indicate the medium as busy.     volatile double noisePowerDBm;//specifies the nose power (which here we purport to be expressed in units of dBm, which is not entierly correct).     volatile double csTime;     int Nnodes; //     int statNumSentPackets=0;      int packetsLost=0;     string TransceiverLogFileName; 
+     private:     
+         volatile double turnAroundTime;    
+         volatile double txPowerDBm; //radiated power in dBm^2   
+         int bitRate;//specifies the transmission bitrate in bits/s   
+         volatile double csThreshDBm;//specifies the observed signal power (in dBm) aboce which a carrier-sensing station will indicate the medium as busy.     
+         volatile double noisePowerDBm;//specifies the nose power (which here we purport to be expressed in units of dBm, which is not entierly correct).    
+         volatile double csTime;  
+         int Nnodes; //     int statNumSentPackets=0;     
+         int packetsLost=0;   
+         string TransceiverLogFileName; 
  
  
     //list of current transmissions. On compile set length to number of nodes in the simulation     //        currentTransmissions currentTransmissionsList[getParentModule()>par("TransmitterNodes")];     SignalStart* currentTransmissionsList[MAX_TRANSCEIVER_COUNT]; 
