@@ -252,11 +252,18 @@ void Transceiver::handleSignalStart(SignalStart *msg)
  
       for(int i = 0; i<Nnodes ;i++)
       {
-         currentSignalStart= currentTransmissionsList[i];         //        currentTransmissionsList[i] = nullptr; //dereference the msg in the list 
+         currentSignalStart= currentTransmissionsList[i];        
+         //        currentTransmissionsList[i] = nullptr; 
+       
+        //dereference the msg in the list 
+        if(currentSignalStart != nullptr)
+        {       
+            if(msg->getIdentifier() == currentSignalStart->getIdentifier())
+            {
+                msgFound = true; 
  
-        if(currentSignalStart != nullptr){             if(msg->getIdentifier() == currentSignalStart->getIdentifier()){                 msgFound = true; 
- 
-                if(currentSignalStart->getCollidedFlag() == true){                     //delete SignalStop and SignalStart message, collided messages are always dropped                     EV << "Signal Stop received, collision detected, signalstop message dropped\n";                     packetsLost++;                     cancelAndDelete(currentTransmissionsList[i]);                     currentTransmissionsList[i]= nullptr;                 }                 else{                     double receivedPowerDBM = calcReceivedPowerDBM(currentSignalStart); 
+                if(currentSignalStart->getCollidedFlag() == true)
+                {                     //delete SignalStop and SignalStart message, collided messages are always dropped                     EV << "Signal Stop received, collision detected, signalstop message dropped\n";                     packetsLost++;                     cancelAndDelete(currentTransmissionsList[i]);                     currentTransmissionsList[i]= nullptr;                 }                 else{                     double receivedPowerDBM = calcReceivedPowerDBM(currentSignalStart); 
  
                     double signalToNoiseRatio = receivedPowerDBM - (noisePowerDBm + 10*log10(bitRate));                     EV << "signalToNoiseRatio : " << signalToNoiseRatio << endl; 
  
