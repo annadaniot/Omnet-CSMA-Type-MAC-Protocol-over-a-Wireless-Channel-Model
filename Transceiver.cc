@@ -438,7 +438,12 @@ void Transceiver::handleTransmissionRequest(TransmissionRequest* msg)
     
         macResponse->setBusyChannel(true);   
     } 
-        macResponse->setKind(CS_RESPONSE);     EV << "Sending CS_RESPONSE with BusyChannel: " << macResponse->getBusyChannel() << endl;     EV << "CS_RESPOSE will arrive at T= " << simTime() + csTime << endl;     //wait for a time corresponding to the csTime parameter     scheduleAt(simTime()+csTime, macResponse);     //    sendDelayed(macResponse, simTime() + csTime, "tx2MacOut"); 
+    macResponse->setKind(CS_RESPONSE);  
+   EV << "Sending CS_RESPONSE with BusyChannel: " << macResponse->getBusyChannel() << endl;   
+   EV << "CS_RESPOSE will arrive at T= " << simTime() + csTime << endl;   
+   //wait for a time corresponding to the csTime parameter     scheduleAt(simTime()+csTime, macResponse);   
+   //    sendDelayed(macResponse, simTime() + csTime, "tx2MacOut"); 
  
-    delete msg; }
+   delete msg;
+  }
 
