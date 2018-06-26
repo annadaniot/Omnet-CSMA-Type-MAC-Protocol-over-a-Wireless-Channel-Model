@@ -272,11 +272,15 @@ void Transceiver::handleSignalStart(SignalStart *msg)
                 }
                 else{          
                    double receivedPowerDBM = calcReceivedPowerDBM(currentSignalStart); 
-                   double signalToNoiseRatio = receivedPowerDBM - (noisePowerDBm + 10*log10(bitRate));                     EV << "signalToNoiseRatio : " << signalToNoiseRatio << endl; 
+                   double signalToNoiseRatio = receivedPowerDBM - (noisePowerDBm + 10*log10(bitRate)); 
+                   EV << "signalToNoiseRatio : " << signalToNoiseRatio << endl; 
  
-                    double bitErrorRate = erfc(sqrt(2*pow(10,(signalToNoiseRatio/10))));                     EV << "bitErrorRate (Berror): " << bitErrorRate << endl; 
- 
-                    int msgSize = currentSignalStart->getMacMsg()->getApplMsg()>getMsgSize() * 8;                     double packetErrorRate = 1 - pow((1 - bitErrorRate),msgSize);                     EV << "Packet Error Rate :" << packetErrorRate << endl;                     double u = ((double) rand() / (RAND_MAX)); 
+                   double bitErrorRate = erfc(sqrt(2*pow(10,(signalToNoiseRatio/10))));  
+                   EV << "bitErrorRate (Berror): " << bitErrorRate << endl; 
+                 
+                   int msgSize = currentSignalStart->getMacMsg()->getApplMsg()>getMsgSize() * 8; 
+                   double packetErrorRate = 1 - pow((1 - bitErrorRate),msgSize);     
+                 EV << "Packet Error Rate :" << packetErrorRate << endl;                     double u = ((double) rand() / (RAND_MAX)); 
  
                     if(u<packetErrorRate){                         //drop message                         EV << "packet exceeds bit error rate, dropping\n"; 
  
