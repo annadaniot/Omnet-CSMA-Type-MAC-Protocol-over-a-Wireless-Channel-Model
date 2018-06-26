@@ -355,9 +355,17 @@ void Transceiver::handleTransmissionRequest(TransmissionRequest* msg)
        //extract message size, do this here before sending signal start as the receiver might delete the msg before extracting the length     
        //msgSize is bits, getMsgSize() is bytes     
        int msgSize = msg->getMacMsg()->getApplMsg()->getMsgSize() * 8;   
-       double msgDelay = (double) msgSize/ (double) bitRate;         EV << "Extracted appmsg of size (bits) " << msgSize  << "\nSneding signal stop in "<< msgDelay << "seconds"<< endl; 
- 
-        //signal start of transmission by sending message SignalStart to the channel         SignalStart* msgSignalStart = new SignalStart();         msgSignalStart->setTransmitPowerDBm(txPowerDBm);         msgSignalStart->setPositionX(getParentModule()->par("nodeXPosition"));         msgSignalStart->setPositionY(getParentModule()->par("nodeYPosition"));         msgSignalStart->setIdentifier(getParentModule()->par("nodeIdentifier"));         msgSignalStart->setCollidedFlag(false);         msgSignalStart->setKind(SIGNAL_START);         msgSignalStart->setMacMsg(msg->getMacMsg());         statNumSentPackets++;         send(msgSignalStart, "tx2ChanOut"); 
+       double msgDelay = (double) msgSize/ (double) bitRate;      
+       EV << "Extracted appmsg of size (bits) " << msgSize  << "\nSneding signal stop in "<< msgDelay << "seconds"<< endl;
+       
+       //signal start of transmission by sending message SignalStart to the channel        
+       SignalStart* msgSignalStart = new SignalStart();     
+       msgSignalStart->setTransmitPowerDBm(txPowerDBm);    
+       msgSignalStart->setPositionX(getParentModule()->par("nodeXPosition"));   
+       msgSignalStart->setPositionY(getParentModule()->par("nodeYPosition"));   
+       msgSignalStart->setIdentifier(getParentModule()->par("nodeIdentifier"));  
+       msgSignalStart->setCollidedFlag(false);
+       msgSignalStart->setKind(SIGNAL_START);         msgSignalStart->setMacMsg(msg->getMacMsg());         statNumSentPackets++;         send(msgSignalStart, "tx2ChanOut"); 
 
       //start creation of signal stop         SignalStop* msgSignalStop = new SignalStop(); //signal stop contains no feilds         msgSignalStop->setKind(BITRATE_WAIT);         msgSignalStop->setIdentifier(getParentModule()->par("nodeIdentifier")); 
  
