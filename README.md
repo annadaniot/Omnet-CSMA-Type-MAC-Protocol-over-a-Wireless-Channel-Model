@@ -3,7 +3,7 @@
 
 # Project Description
 
-In this project we used OMNet++ to investigate the performance of a simple CSMAtype medium access control protocol over a wireless channel model. An overview over the considered system is shown in the system setup file. 
+In this project we used OMNet++ to investigate the performance of a simple CSMA type medium access control protocol over a wireless channel model. An overview over the considered system is shown in the system setup file. 
 
 In the system, it has a variable number of transmitter nodes, which sends data packets to a single reciever node over a common and shared wireless channel. A transmitter node consists of the following components:
     1. The packet generator module generates application layer messages with some (stochastic) interarrival time distribution that can be        chosen in the conﬁguration ﬁle. These messages are sent to the MAC module of the same station.
