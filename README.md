@@ -12,6 +12,10 @@ In the system, it has a variable number of transmitter nodes, which sends data p
        processing.
     3. The transceiver module actually transmits packets on the channel and helps the MAC with carrier-sensing. Furthermore, it receives  
        packets from the channel and determines whether these packets are correctly received – if not, it will drop the received packet.
+       
+The receiver node will use the same MAC and transceiver modules, but instead of a packet generator module it will use a packet sink module, which accepts incoming packets (from its local MAC) and prints out some information about these (e.g. arrival time, identiﬁcation of sending node, information about user data) in a logﬁle.
+The channel module distributes packets / signals between all attached stations, most of the modeling of wireless propagation takes place in the transceivers.
+
 
 
 
